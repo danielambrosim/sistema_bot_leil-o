@@ -29,9 +29,6 @@ sistema_bot_leilao/
 ## Instalar Dependências
 npm install
 
-## Iniciar o Bot com PM2 (opcional)
-npm install -g pm2 ts-node
-pm2 start ts-node -- src/bot.ts --name telegram-bot --watch
 
 # Observações Importantes
 
