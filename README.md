@@ -1,10 +1,14 @@
 # Instalação de Dependências
+npm install node-telegram-bot-api mysql2 nodemailer bcrypt dotenv cpf-cnpj-validator cheerio axios
+npm install -D typescript ts-node @types/node @types/bcrypt @types/nodemailer @types/cheerio @types/axios @types/node-telegram-bot-api nodemon
 
 ## Pacotes Principais
-npm install mysql2 node-telegram-bot-api nodemailer cpf-cnpj-validator bcrypt dotenv
+npm install node-telegram-bot-api mysql2 nodemailer bcrypt dotenv cpf-cnpj-validator cheerio axios
+
 
 ## Pacotes de Desenvolvimento
-npm install -D typescript ts-node @types/node @types/bcrypt @types/nodemailer mysql2
+npm install -D typescript ts-node @types/node @types/bcrypt @types/nodemailer @types/cheerio @types/axios @types/node-telegram-bot-api nodemon
+
 
 ## Configuração do TypeScript
 npx tsc --init
