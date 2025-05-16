@@ -17,7 +17,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/bot.js",
-    "dev": "ts-node src/bot.ts"
+    "dev": "ts-node src/bot.ts",
+    "postinstall": "npm install typescript"
   },
   "devDependencies": {
     "@types/axios": "^0.9.36",
