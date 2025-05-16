@@ -12,7 +12,7 @@ npx tsc --init
 
 ## Estrutura do Projeto
 
-Bot_Andre-main/
+sistema_bot_leilões/
 ├── src/
 │   ├── bot.ts                 // Lógica principal do bot
 │   ├── db.ts                  // Conexões e queries MySQL
