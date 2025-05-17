@@ -1,7 +1,7 @@
 {
   "name": "sistema_bot_leilao",
   "version": "1.0.0",
-  "description": "",
+  "description": "npm install node-telegram-bot-api mysql2 nodemailer bcrypt dotenv cpf-cnpj-validator cheerio axios\r npm install -D typescript ts-node @types/node @types/bcrypt @types/nodemailer @types/cheerio @types/axios @types/node-telegram-bot-api nodemon",
   "main": "dist/bot.js",
   "repository": {
     "type": "git",
@@ -36,6 +36,7 @@
     "cheerio": "^1.0.0",
     "cpf-cnpj-validator": "^1.0.3",
     "dotenv": "^16.5.0",
+    "express": "^5.1.0",
     "mysql2": "^3.14.1",
     "node-telegram-bot-api": "^0.66.0",
     "nodemailer": "^7.0.3"
