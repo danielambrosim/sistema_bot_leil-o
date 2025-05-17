@@ -12,32 +12,35 @@ export const connectionPromise = mysql.createConnection({
 });
 
 // Salvar novo usuário
-export async function salvarUsuario(
-  nome: string,
-  email: string,
-  cpf_cnpj: string,
-  senha: string,
-  endereco_cpf: string,
-  endereco_cnpj: string,
-  telegram_chat_id: number | null,
-  imagem_doc_id: string,
-  comprovante_residencia_id: string
-) {
+export async function salvarUsuario(usuario: {
+  nome: string;
+  email: string;
+  cpf_cnpj: string;
+  senha: string;
+  endereco_cpf: string;
+  endereco_cnpj: string;
+  chat_id: number;  // Note que no SQL você usa telegram_chat_id
+  imagem_doc_id: string;
+  comprovante_residencia_id: string;
+}) {
   const sql = `INSERT INTO usuarios 
     (nome, email, cpf_cnpj, senha, endereco_cpf, endereco_cnpj, telegram_chat_id, imagem_doc_id, comprovante_residencia_id) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  
   const connection = await connectionPromise;
+  
   const [result] = await connection.execute(sql, [
-    nome,
-    email,
-    cpf_cnpj,
-    senha,
-    endereco_cpf,
-    endereco_cnpj,
-    telegram_chat_id,
-    imagem_doc_id,
-    comprovante_residencia_id,
+    usuario.nome,
+    usuario.email,
+    usuario.cpf_cnpj,
+    usuario.senha,
+    usuario.endereco_cpf,
+    usuario.endereco_cnpj,
+    usuario.chat_id, // Aqui usamos chat_id que veio do parâmetro
+    usuario.imagem_doc_id,
+    usuario.comprovante_residencia_id,
   ]);
+  
   return result;
 }
 
