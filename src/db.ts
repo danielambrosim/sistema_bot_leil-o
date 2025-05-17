@@ -1,7 +1,22 @@
 import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
 
 dotenv.config();
+
+// Definindo a interface Usuario
+export interface Usuario {
+  id?: number;
+  nome: string;
+  email: string;
+  cpf_cnpj: string;
+  senha: string;
+  endereco_cpf: string;
+  endereco_cnpj: string;
+  chat_id: number;
+  imagem_doc_id: string;
+  comprovante_residencia_id: string;
+}
 
 export const connectionPromise = mysql.createConnection({
   host: process.env.DATABASE_HOST || 'localhost',
@@ -12,17 +27,7 @@ export const connectionPromise = mysql.createConnection({
 });
 
 // Salvar novo usuário
-export async function salvarUsuario(usuario: {
-  nome: string;
-  email: string;
-  cpf_cnpj: string;
-  senha: string;
-  endereco_cpf: string;
-  endereco_cnpj: string;
-  chat_id: number;  // Note que no SQL você usa telegram_chat_id
-  imagem_doc_id: string;
-  comprovante_residencia_id: string;
-}) {
+export async function salvarUsuario(usuario: Usuario) {
   const sql = `INSERT INTO usuarios 
     (nome, email, cpf_cnpj, senha, endereco_cpf, endereco_cnpj, telegram_chat_id, imagem_doc_id, comprovante_residencia_id) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -36,7 +41,7 @@ export async function salvarUsuario(usuario: {
     usuario.senha,
     usuario.endereco_cpf,
     usuario.endereco_cnpj,
-    usuario.chat_id, // Aqui usamos chat_id que veio do parâmetro
+    usuario.chat_id,
     usuario.imagem_doc_id,
     usuario.comprovante_residencia_id,
   ]);
@@ -60,12 +65,25 @@ export async function adicionarSiteParaUsuario(usuario_id: number, site_id: numb
   return result;
 }
 
-// Buscar usuário pelo email
-export async function buscarUsuarioPorEmail(email: string) {
-  const sql = `SELECT id, senha FROM usuarios WHERE email = ?`;
+// Buscar usuário pelo email (atualizada para retornar todos os campos necessários)
+export async function buscarUsuarioPorEmail(email: string): Promise<Usuario | null> {
+  const sql = `SELECT 
+    id, 
+    nome, 
+    email, 
+    cpf_cnpj, 
+    senha, 
+    endereco_cpf, 
+    endereco_cnpj, 
+    telegram_chat_id AS chat_id, 
+    imagem_doc_id, 
+    comprovante_residencia_id 
+    FROM usuarios WHERE email = ?`;
+  
   const connection = await connectionPromise;
   const [rows]: any = await connection.execute(sql, [email]);
-  return rows; // retorna array
+  
+  return rows[0] || null;
 }
 
 // Listar sites disponíveis
@@ -84,7 +102,6 @@ export async function salvarNovoSite(nome: string, url: string) {
   return result;
 }
 
-
 // Buscar todos os usuários com seus sites (para notificações automáticas)
 export async function buscarUsuariosComSites() {
   const sql = `
@@ -96,4 +113,13 @@ export async function buscarUsuariosComSites() {
   const connection = await connectionPromise;
   const [rows] = await connection.query(sql);
   return rows as { chat_id: number; nome: string; url: string }[];
+}
+
+// Verificar credenciais do usuário
+export async function verificarCredenciais(email: string, senha: string): Promise<Usuario | null> {
+  const usuario = await buscarUsuarioPorEmail(email);
+  if (!usuario || !usuario.senha) return null;
+  
+  const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+  return senhaCorreta ? usuario : null;
 }
