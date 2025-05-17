@@ -14,11 +14,11 @@
     "url": "https://github.com/danielambrosim/sistema_bot_leilao/issues"
   },
   "homepage": "https://github.com/danielambrosim/sistema_bot_leilao#readme",
-"scripts": {
-  "start": "node dist/bot.js",
-  "build": "tsc",
-  "dev": "ts-node src/bot.ts"
-},
+  "scripts": {
+    "start": "node dist/bot.js",
+    "build": "tsc",
+    "dev": "ts-node src/bot.ts"
+  },
   "devDependencies": {
     "@types/axios": "^0.9.36",
     "@types/bcrypt": "^5.0.2",
