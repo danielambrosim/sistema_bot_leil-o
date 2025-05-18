@@ -228,7 +228,24 @@ bot.on('message', async (msg) => {
 
   // 3. Processa comandos do menu principal
   const comandoNormalizado = text.toLowerCase();
-  const handler = COMANDOS_MENU[comandoNormalizado as keyof typeof COMANDOS_MENU];
+const ALIAS_COMANDOS: { [key: string]: string } = {
+  'cadastro': '📝 cadastro',
+  '📝 cadastro': '📝 cadastro',
+  'login': '🔑 login',
+  '🔑 login': '🔑 login',
+  'editais': '📋 editais',
+  '📋 editais': '📋 editais',
+  'buscar edital': '🔍 buscar edital',
+  '🔍 buscar edital': '🔍 buscar edital',
+  'ajuda': 'ℹ️ ajuda',
+  'ℹ️ ajuda': 'ℹ️ ajuda',
+  'logout': '🚪 logout',
+  'sair': '🚪 logout',
+  '🚪 logout': '🚪 logout'
+};
+
+const comandoChave = ALIAS_COMANDOS[comandoNormalizado] || comandoNormalizado;
+const handler = COMANDOS_MENU[comandoChave as keyof typeof COMANDOS_MENU];
   
   if (handler) {
     await handler(chatId);
