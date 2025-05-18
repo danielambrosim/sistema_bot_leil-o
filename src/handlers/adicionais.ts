@@ -1,29 +1,30 @@
-import { bot } from '../bot';
-import { listarSites } from '../db';
-import { buscarEditais } from '../services/edital';
+// src/handlers/adicionais.ts
 
-export class HandlersAdicionais {
-  // Lista todos os sites cadastrados no banco
-  static async listarSitesParaBusca(chatId: number): Promise<void> {
+import { bot } from '../bot';            // Certifique-se que o import não gera loop! Se der erro, passe o bot como parâmetro.
+import { listarSites } from '../db';     // Função que retorna a lista de sites (do banco)
+
+export const HandlersAdicionais = {
+  // Exibe lista de sites para buscar editais
+  listarSitesParaBusca: async (chatId: number) => {
     const sites = await listarSites();
-    if (!sites.length) {
-      await bot.sendMessage(chatId, 'Nenhum site cadastrado no sistema.');
+    if (!sites || !sites.length) {
+      await bot.sendMessage(chatId, 'Nenhum site cadastrado ainda.');
       return;
     }
-    const keyboard = sites.map(site => [{ text: site.nome }]);
-    await bot.sendMessage(chatId, '🔍 Selecione um site:', {
+
+    await bot.sendMessage(chatId, 'Escolha um site para busca:', {
       reply_markup: {
-        keyboard,
-        resize_keyboard: true
+        inline_keyboard: sites.map(site => [
+          { text: site.nome, callback_data: `buscar_${site.id}` }
+        ])
       }
     });
-  }
+  },
 
-  // Busca editais do site selecionado (por nome)
-  static async buscarEditaisDoSite(siteNome: string): Promise<string[]> {
-    const sites = await listarSites();
-    const siteData = sites.find(s => s.nome === siteNome);
-    if (!siteData) return [];
-    return await buscarEditais(siteData.url, siteData.seletor);
-  }
-}
+  // Você pode adicionar outros comandos aqui, por exemplo:
+  mostrarSobre: async (chatId: number) => {
+    await bot.sendMessage(chatId, 'Este é o Bot de Leilões, desenvolvido por Daniel.');
+  },
+
+  // ...outros comandos extras
+};

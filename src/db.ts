@@ -9,10 +9,11 @@ export interface Usuario {
   id?: number;
   nome: string;
   email: string;
-  cpf_cnpj: string;
+  cpf: string;  // CPF obrigatório
+  cnpj?: string; // CNPJ opcional
   senha: string;
   endereco_cpf: string;
-  endereco_cnpj: string;
+  endereco_cnpj?: string; // também pode ser opcional
   chat_id: number;
   imagem_doc_id: string;
   comprovante_residencia_id: string;
@@ -66,7 +67,8 @@ export async function salvarUsuario(usuario: Usuario): Promise<{success: boolean
     const [result]: any = await pool.execute(sql, [
       usuario.nome,
       usuario.email,
-      usuario.cpf_cnpj,
+      usuario.cpf,
+      usuario.cnpj,
       await bcrypt.hash(usuario.senha, 10), // Hash da senha antes de salvar
       usuario.endereco_cpf,
       usuario.endereco_cnpj,
